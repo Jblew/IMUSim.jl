@@ -1,0 +1,4 @@
+name = "IMUSim"
+uuid = "359f5a2f-01d9-48b1-a2ae-3403bfeb44c1"
+authors = ["Jędrzej Lewandowski <jedrzejblew@gmail.com>"]
+version = "0.1.0"
