@@ -1,5 +1,14 @@
 module IMUSim
+using GLMakie
+include("animate.jl")
 
-greet() = print("Hello World!")
+function makeAndSaveAnimation()
+    save("animation.jl", makeAnimation())
+end
 
+function run()
+    makeAndSaveAnimationCG()
+end
+
+export makeAnimation, makeAndSaveAnimation, run
 end # module

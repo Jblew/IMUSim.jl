@@ -2,3 +2,7 @@ name = "IMUSim"
 uuid = "359f5a2f-01d9-48b1-a2ae-3403bfeb44c1"
 authors = ["Jędrzej Lewandowski <jedrzejblew@gmail.com>"]
 version = "0.1.0"
+
+[deps]
+ConstructiveGeometry = "d7b4f48a-cc68-4606-be83-5982dfebca4b"
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
