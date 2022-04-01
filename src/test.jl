@@ -1,7 +1,7 @@
 using Test
 
 @testset "Tests" begin
-    include("input.test.jl")
+    include("movement.test.jl")
 end
 
 nothing
