@@ -1,5 +1,6 @@
 module IMUSim
-export PositionPath, getPositionXYZAt, getRotationXYZAt
+export PositionPath, MCUPath, getPositionXYZAt, getRotationXYZAt, getAccelerationXYZAt, getAngularRateXYZAt
+include("euler.jl")
 
 struct PositionPath
     posXYZrotXYZ::Matrix{Float64}
@@ -14,11 +15,18 @@ function getRotationXYZAt(path::PositionPath, t::Int)::Vector{Float64}
     return path.posXYZrotXYZ[t, 4:6]
 end
 
-# function getAccelXYZAt(path::PositionPath, t::Int)::Vector{Float64}
-#     prevT = t < 2 ? t : t - 1
-#     prev = path[prevT, :]
-#     curr = path[t, :]
-# end
+struct MCUPath
+    accXYZgyrXYZ::Matrix{Float64}
+    MCUPath(positionPath::PositionPath) = new(eulerDerivativeOfMatrix(positionPath.posXYZrotXYZ; order=2))
+end
+
+function getAccelerationXYZAt(path::MCUPath, t::Int)::Vector{Float64}
+    return path.accXYZgyrXYZ[t, 1:3]
+end
+
+function getAngularRateXYZAt(path::MCUPath, t::Int)::Vector{Float64}
+    return path.accXYZgyrXYZ[t, 4:6]
+end
 
 function genPositionPathMatrix(positionFn::Function, length::Int)::Matrix{Float64}
     m = zeros(length, 6)
@@ -26,11 +34,6 @@ function genPositionPathMatrix(positionFn::Function, length::Int)::Matrix{Float6
         m[i, :] = positionFn(i)
     end
     return m
-end
-
-struct IMUPath
-    accXYZgyrXYZ::Matrix{Float64}
-    IMUPath(positionPath::PositionPath) = new(eulerDerivative(positionPath; order=2))
 end
 
 end # module
