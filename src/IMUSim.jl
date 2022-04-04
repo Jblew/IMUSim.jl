@@ -17,7 +17,7 @@ end
 
 struct MCUPath
     accXYZgyrXYZ::Matrix{Float64}
-    MCUPath(positionPath::PositionPath) = new(eulerDerivativeOfMatrix(positionPath.posXYZrotXYZ; order=2))
+    MCUPath(positionPath::PositionPath; gravityEnabled=true) = new(eulerDerivativeOfMatrix(positionPath.posXYZrotXYZ; order=2))
 end
 
 function getAccelerationXYZAt(path::MCUPath, t::Int)::Vector{Float64}
