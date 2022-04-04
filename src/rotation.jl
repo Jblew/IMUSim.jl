@@ -38,5 +38,5 @@ function rotateByAngles(dir::Vector{T}, angularPosXYZ::Matrix{T}) where {T<:Floa
     c3 = cα .* cβ
     rotationMatrixLx3x3 = [a1 b1 c1;;; a2 b2 c2;;; a3 b3 c3]
 
-    return [dir' * rotationMatrixLx3x3[i, :, :] for i in 1:size(angularPosXYZ)[1]]
+    return vcat([dir' * rotationMatrixLx3x3[i, :, :] for i in 1:size(angularPosXYZ)[1]]...)
 end

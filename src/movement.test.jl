@@ -28,7 +28,7 @@ end
     accelerated(t) = [0, 0, 2 * t^2, 0, 0, 0]
     mcuReadingsPath = IMUSim.MCUPath(IMUSim.PositionPath(accelerated, 100))
     @test IMUSim.getAccelerationXYZAt(mcuReadingsPath, 10) == [0, 0, 4 - 1]
-    @test IMUSim.getAngularRateXYZAt(mcuReadingsPath, 10) == [0, 2, 0]
+    @test IMUSim.getAngularRateXYZAt(mcuReadingsPath, 10) == [0, 0, 0]
 end
 
 @testset "uniformly accelerated motion with gravity with rotation perpendicular to gravity" begin

@@ -4,7 +4,7 @@ include("euler.jl")
 include("rotation.jl")
 
 struct PositionPath
-    posXYZ::Matrix{Float64}
+    posXYZrotXYZ::Matrix{Float64}
     PositionPath(positionFn::Function, length::Int) = new(genPositionPathMatrix(positionFn, length))
 end
 
@@ -34,8 +34,8 @@ function genMXUReadingsPath(positionPath::PositionPath; gravityEnabled::Bool)::M
     if gravityEnabled
         baseGravityAccel = [0.0, 0.0, -1.0]
         gravityAccel = rotateByAngles(baseGravityAccel, positionPath.posXYZrotXYZ[:, 4:6])
-        print(gravityAccel)
-        return accelPath + gravityAccel
+        nrows = size(gravityAccel)[1]
+        return accelPath .+ [gravityAccel zeros(nrows, 3)]
     else
         return accelPath
     end
