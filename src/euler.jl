@@ -1,13 +1,26 @@
-function eulerDerivative(matrixRowBased::Matrix{Float64}; order=1)
-    kernel = getDerivativeKernel(; order, kernelLength=6)
-    # Can we apply this in loop that will be multithreaded?
-    return m
-end
+function eulerDerivativeOfMatrix(matrixRowBased::Matrix{Float64}; order=1)
+    kernelVec = pascalSubtractionTriangleCoeffsAt(order + 1)
+    kernelSize = size(kernelVec)[2]
 
-function getDerivativeKernel(; order::Int, kernelLength::Int)
-    coeffs = pascalSubtractionTriangleCoeffsAt(order + 1)
-    kernelLines = [fill(coeffs[i], kernelLength)' for i in 1:length(coeffs)]
-    return vcat(kernelLines...)
+    derivedM = zeros(size(matrixRowBased))
+    rowCount = size(matrixRowBased)[1]
+    colCount = size(matrixRowBased)[2]
+    for i = 1:rowCount
+        kernelView::Metrix{Float64}
+        if i < kernelSize
+            paddingSize = kernelSize - i
+            paddingM = zeros(paddingSize, colCount)
+            kernelView = [paddingM; matrixRowBased[i:kernelSize, :]]
+        else
+            viewStart = i - kernelSize
+            viewEnd = i
+            kernelView = matrixRowBased[viewStart:viewEnd, :]
+        end
+        derivedRow = kernelVec * kernelView
+        derivedM[i, :] = derivedRow
+    end
+
+    return derivedM
 end
 
 function pascalSubtractionTriangleCoeffsAt(n::Int)::Vector{Int}
